@@ -49,8 +49,15 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
-                <Button onClick={this.fblogin} outline color="primary">Login</Button>{' '}
+            <div className="Page-login cover-wrapper">
+                <div className="cover-wrapper-inner">
+                    <div className="m-auto">
+                        <Button onClick={this.fblogin} size="lg" color="primary">
+                            <i className="fa fa-lg fa-facebook" aria-hidden="true"/>{' '}{' '}
+                            Continue with Facebook
+                        </Button>
+                    </div>
+                </div>
             </div>
         );
     }

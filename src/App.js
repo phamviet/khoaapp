@@ -169,8 +169,8 @@ class App extends Component {
                                 ))}
                             </Nav>
 
-                            <Form inline className="ml-4">
-                                <Button onClick={() => this.props.history.push('/create')} outline color="primary">Create</Button>
+                            <Form inline className="ml-auto">
+                                <Button onClick={() => this.props.history.push('/create')} color="success">Create Site</Button>
                             </Form>
 
 

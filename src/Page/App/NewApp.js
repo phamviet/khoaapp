@@ -121,7 +121,7 @@ class NewApp extends Component {
                                        autoComplete="off" placeholder="Password"/>
                                 { isRequired.adminPassword && <FormFeedback>This field is required</FormFeedback>}
                             </FormGroup>
-                            <Button type="submit" disabled={saving} onClick={this.submit} color="primary">Create</Button>
+                            <Button type="submit" disabled={saving} onClick={this.submit} color="success">Create</Button>
                             {' '}
                             <Link to="/" className="btn btn-link">Back</Link>
                         </Form>

@@ -1,13 +1,62 @@
 
-.Page-content {
-  padding: 15px 0;
+.container {
+    max-width: 1000px;
 }
 
-.App-intro {
-  font-size: large;
+.Page-content {
+    padding: 15px 0;
+}
+
+.Page-login {
+    /*background-color: #2196F3;*/
+    /*color: #ffffff;*/
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+html,
+body, #root {
+    background-color: white;
+    height: 100%;
+}
+
+.cover-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%; /* For at least Firefox */
+    min-height: 100%;
+}
+
+.cover-wrapper-inner {
+    display: table-cell;
+    vertical-align: top;
+    text-align: center;
+}
+
+.cover-container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 40em) {
+    /* Start the vertical centering */
+    .cover-wrapper-inner {
+        vertical-align: middle;
+    }
+    .cover-container {
+        width: 100%; /* Must be percentage or pixels for horizontal alignment */
+    }
+}
+
+@media (min-width: 62em) {
+    .cover-container {
+        width: 62rem;
+    }
 }
