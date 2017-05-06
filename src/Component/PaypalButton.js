@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import makeAsyncScriptLoader from  'react-async-script';
+import PropTypes from 'prop-types';
 
 let ReactButton;
 
 class PaypalButton extends Component {
+    static propTypes = {
+        env: PropTypes.oneOf(['sandbox', 'production']).isRequired
+    }
 
     client = {
         sandbox: 'Ac05KE8JVUUjOHSy6hSnb6F4r_lCgdATvyO-EkM1BCT53rZdS7vb3IQzc0EbAvVdapf2Jm44yK0tNk_p',
@@ -51,7 +55,7 @@ class PaypalButton extends Component {
             <div>
                 <PaypalSdk asyncScriptOnLoad={this.onScriptLoaded}/>
                 {!!ReactButton && <ReactButton
-                    env={'sandbox'}
+                    env={this.props.env}
                     client={this.client}
                     payment={this.payment}
                     onAuthorize={this.onAuthorize}

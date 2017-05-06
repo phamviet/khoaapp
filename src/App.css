@@ -1,15 +1,8 @@
 
-.container {
-    max-width: 1000px;
-}
-
-.Page-content {
-    padding: 15px 0;
-}
-
-.Page-login {
-    /*background-color: #2196F3;*/
-    /*color: #ffffff;*/
+@media (min-width: 48em) {
+    .container {
+        max-width: 1000px;
+    }
 }
 
 @keyframes App-logo-spin {

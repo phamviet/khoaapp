@@ -80,7 +80,7 @@ class App extends Component {
 
             state.ready = true;
             state.profile = data;
-            state.apps = apps;
+            state.apps = apps || [];
         }
 
         state.initializing = false;
@@ -144,7 +144,7 @@ class App extends Component {
         }
 
         const globalProps = {
-            config: this.props.appConfig,
+            config: this.props.config,
             profile,
             apps,
             updateProfile: this.updateProfile,
@@ -155,31 +155,26 @@ class App extends Component {
         };
 
         return (
-            <div>
+            <Container>
                 <Navbar color="faded" light toggleable>
-                    <Container>
-                        <NavbarToggler right onClick={this.toggle}/>
-                        <Link className="navbar-brand" to="/">SlimApp</Link>
-                        <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav navbar>
-                                {routes.map((route, index) => (
-                                    <NavItem key={index}>
-                                        <Link className="nav-link" to={route.path}>{route.label}</Link>
-                                    </NavItem>
-                                ))}
-                            </Nav>
+                    <NavbarToggler right onClick={this.toggle}/>
+                    <Link className="navbar-brand" to="/">Khoaapp</Link>
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav navbar>
+                            {routes.map((route, index) => (
+                                <NavItem key={index}>
+                                    <Link className="nav-link" to={route.path}>{route.label}</Link>
+                                </NavItem>
+                            ))}
+                        </Nav>
 
-                            <Form inline className="ml-auto">
-                                <Button onClick={() => this.props.history.push('/create')} color="success">Create Site</Button>
-                            </Form>
-
-
-                        </Collapse>
-                    </Container>
+                        <Form inline className="ml-auto">
+                            <Button onClick={() => this.props.history.push('/create')} color="success">Create Site</Button>
+                        </Form>
+                    </Collapse>
                 </Navbar>
 
-                <Container className="Page-content">
-
+                <div className="pt-3">
                     {messages.map(({message, color}, index) => (
                         <Alert key={index} color={color}>{message}</Alert>
                     ))}
@@ -199,8 +194,8 @@ class App extends Component {
                             <NewApp {...props} {...globalProps} />
                         )}
                     />
-                </Container>
-            </div>
+                </div>
+            </Container>
         );
     }
 }

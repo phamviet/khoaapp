@@ -35,16 +35,16 @@ export default {
         return this.requestJson('GET', path, queryParams, options);
     },
 
-    ping() {
-        return this.postJson('/ping')
+    profile() {
+        return this.getJson('/profile?full=1')
     },
 
-    profile() {
-        return this.getJson('/profile')
+    getUser(id) {
+        return this.getJson('/user/' + id)
     },
 
     create(name, data) {
-        return this.postJson('/app', {name, data})
+        return this.postJson('/app/create', {name, data})
     },
 
     destroy(id, force = 1) {

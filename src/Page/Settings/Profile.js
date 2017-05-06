@@ -70,7 +70,7 @@ class Profile extends Component {
     };
 
     render() {
-        const { profile } = this.props;
+        const { profile, config } = this.props;
 
         return (
             <div>
@@ -104,7 +104,7 @@ class Profile extends Component {
                                     </CardTitle>
                                 </div>
                                 <div className="p-3">
-                                    <PaypalButton onSuccess={this.onCreditAdded}/>
+                                    <PaypalButton env={config.paypalMode} onSuccess={this.onCreditAdded}/>
                                 </div>
                             </CardBlock>
                         </Card>

@@ -20,6 +20,10 @@ class NewApp extends Component {
         isRequired: {},
     };
 
+    componentWillMount() {
+        this.setState({ data: { ...this.state.data, adminEmail: this.props.profile.email } });
+    }
+
     onNameChange = (e) => {
         const name = e.target.value;
         this.setState({ name });
@@ -32,7 +36,7 @@ class NewApp extends Component {
     submit = async (e) => {
         e.preventDefault();
 
-        const { history, alert, addApp } = this.props;
+        const { history, alert, addApp, profile, updateProfile } = this.props;
 
         const {name, data} = this.state;
         let isRequired = {};
@@ -58,6 +62,14 @@ class NewApp extends Component {
         if (response.ok) {
             addApp(json);
             alert('New site successful created');
+
+            // Update credit
+            const res = await api.getUser(profile.id);
+            if (res.ok) {
+                const data = await res.json();
+                updateProfile(data);
+            }
+
             this.setState({ saving: false }, () => history.push('/'));
         } else {
             if (response.status > 400 && response.status < 500) {
@@ -67,6 +79,7 @@ class NewApp extends Component {
             this.setState({ saving: false });
         }
     };
+
     render() {
         const { saving, isRequired, data } = this.state;
 
@@ -100,6 +113,7 @@ class NewApp extends Component {
                             <FormGroup {...(isRequired.adminEmail ? {color: 'danger'}: {})}>
                                 <Input disabled={saving}
                                        type="email"
+                                       value={data.adminEmail}
                                        onChange={e => this.onDataChange(e, 'adminEmail')}
                                        autoComplete="off" placeholder="Email"/>
                                 { isRequired.adminEmail && <FormFeedback>This field is required</FormFeedback>}
