@@ -77,7 +77,7 @@ class Profile extends Component {
                 <Row>
                     <Col sm="6">
                         <Card>
-                            <CardBlock>
+                            <CardBlock style={{ height: '216px' }}>
                                 <dl className="">
                                     <dt>Email</dt>
                                     <dd>{profile.email}</dd>
@@ -86,7 +86,7 @@ class Profile extends Component {
                                     <dd>{humanize.relativeTime(profile.created_at)}</dd>
 
                                     <dt >Last login</dt>
-                                    <dd>{humanize.relativeTime(profile.last_login)}</dd>
+                                    <dd>{!!profile.last_login && humanize.relativeTime(profile.last_login)}</dd>
                                 </dl>
                             </CardBlock>
                         </Card>
