@@ -140,7 +140,7 @@ class App extends Component {
         }
 
         if ( !ready ) {
-            return <Login onSuccess={this.onLoggedIn}/>;
+            return <Login config={this.props.config} onSuccess={this.onLoggedIn}/>;
         }
 
         const globalProps = {

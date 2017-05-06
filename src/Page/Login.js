@@ -19,7 +19,7 @@ class Login extends Component {
 
         const js = window.document.createElement('script');
         js.id = id;
-        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.9&appId=652742791601830";
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.9&appId=" + this.props.config.fbAppId;
         fjs.parentNode.insertBefore(js, fjs);
     }
 
@@ -44,7 +44,7 @@ class Login extends Component {
     };
 
     fblogin = (e) => {
-        window.FB.login(this.fbVerify, { scope: 'public_profile,email' });
+        window.FB.login(this.fbVerify, { scope: 'email' });
     };
 
     render() {
