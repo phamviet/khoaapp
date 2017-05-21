@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
-import { Card, CardBlock, CardTitle } from 'reactstrap';
+import {
+    Card,
+    CardBlock,
+    CardTitle
+} from 'reactstrap';
 import {
     Link,
 } from 'react-router-dom'
 
-import { Button, Label, Form, FormGroup, FormFeedback, Input } from 'reactstrap';
+import { Button, Label, Form, FormGroup, FormText, FormFeedback, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import api from '../../api';
 
 class NewApp extends Component {
     state = {
-        name: '',
         saving: false,
+        submitted: false,
         data: {
+            domain: '',
+            subdomain: '',
             blogTitle: 'My Blog',
             adminEmail: '',
             adminUser: '',
             adminPassword: '',
         },
+        domains: [],
         isRequired: {},
     };
 
@@ -24,13 +31,23 @@ class NewApp extends Component {
         this.setState({ data: { ...this.state.data, adminEmail: this.props.profile.email } });
     }
 
-    onNameChange = (e) => {
-        const name = e.target.value;
-        this.setState({ name });
+    componentDidMount() {
+        this.loadDomainList();
+    }
+
+    async loadDomainList() {
+        const res = await api.get('/domain');
+        if (res.ok) {
+            const domains = await res.json();
+            const domain = domains.length === 1 ? domains[0]['name'] : this.state.domain;
+
+            this.setState({domains, data: {...this.state.data, domain}})
+        }
     };
+
     onDataChange = (e, name) => {
         const value = e.target.value;
-        this.setState({ data: {...this.state.data, [name]: value} });
+        this.setState({ data: {...this.state.data, [name]: value} }, () => this.state.submitted && this.validate());
     };
 
     submit = async (e) => {
@@ -38,30 +55,22 @@ class NewApp extends Component {
 
         const { history, alert, addApp, profile, updateProfile } = this.props;
 
-        const {name, data} = this.state;
-        let isRequired = {};
+        const {data} = this.state;
 
-        Object.keys(data).forEach(field => {
+        this.setState({ submitted: true });
 
-            if ( !data[field] ) {
-                isRequired[field] = true;
-            }
-        });
-
-        this.setState({ isRequired });
-
-        if (Object.keys(isRequired).length) {
+        if (!this.validate()) {
             return;
         }
 
         this.setState({ saving: true });
 
-        const response = await api.create(name, data);
+        const response = await api.post('/app/create', data);
         const json = await response.json();
 
         if (response.ok) {
             addApp(json);
-            alert('New site successful created');
+            alert(`Your site ${json.name} was deployed successfully.`);
 
             // Update credit
             const res = await api.getUser(profile.id);
@@ -70,7 +79,7 @@ class NewApp extends Component {
                 updateProfile(data);
             }
 
-            this.setState({ saving: false }, () => history.push('/'));
+            this.setState({ saving: false, submitted: false }, () => history.push('/'));
         } else {
             if (response.status > 400 && response.status < 500) {
                 alert(json.message || '', 'danger');
@@ -80,8 +89,24 @@ class NewApp extends Component {
         }
     };
 
+    validate() {
+        const {data} = this.state;
+        const { subdomain, ...requiredFields } = data;
+
+        let isRequired = {};
+
+        Object.keys(requiredFields).forEach(field => {
+            if ( !data[field] ) {
+                isRequired[field] = true;
+            }
+        });
+
+        this.setState({ isRequired });
+
+        return Object.keys(isRequired).length === 0;
+    }
     render() {
-        const { saving, isRequired, data } = this.state;
+        const { saving, isRequired, domains, data } = this.state;
 
         return (
             <div>
@@ -90,13 +115,44 @@ class NewApp extends Component {
                         <CardTitle>New site</CardTitle>
                         <hr/>
                         <Form onSubmit={this.submit}>
+                            <FormGroup {...(isRequired.domain ? {color: 'danger'}: {})}>
+                                <Label>Domain</Label>
+                                <Input type="select"
+                                       disabled={saving}
+                                       value={data.domain}
+                                       onChange={e => this.onDataChange(e, 'domain')}
+                                >
+                                    <option value="">Select a domain</option>
+                                    {domains.map(domain => (
+                                        <option
+                                            key={domain.name}
+                                            value={domain.name}
+                                        >
+                                            {domain.name}
+                                        </option>
+                                    ))}
+                                </Input>
+                                { isRequired.domain && <FormFeedback>Please select a domain</FormFeedback>}
 
-                            <FormGroup>
-                                <Input disabled={saving}
-                                       size="lg"
-                                       onChange={this.onNameChange}
-                                       autoComplete="off" placeholder="Domain (Optional)"/>
                             </FormGroup>
+                            {data.domain && (
+                                <FormGroup>
+                                    <Label>Subdomain</Label>
+                                    <InputGroup>
+                                        <Input
+                                            placeholder="Optional"
+                                            disabled={saving}
+                                            value={data.subdomain}
+                                            onChange={e => this.onDataChange(e, 'subdomain')}
+                                        />
+                                        <InputGroupAddon>.{data.domain}</InputGroupAddon>
+                                    </InputGroup>
+                                    <FormText color="muted">
+                                        Leave blank to use chose domain.
+                                    </FormText>
+                                </FormGroup>
+                            )}
+
                             <h5 className="mt-4">Site setup</h5>
                             <hr/>
 
@@ -109,7 +165,9 @@ class NewApp extends Component {
                                 { isRequired.blogTitle && <FormFeedback>This field is required</FormFeedback>}
                             </FormGroup>
 
-                            <Label>Admin Email</Label>
+                            <h5 className="mt-4">Admin account</h5>
+                            <hr/>
+                            <Label>Email</Label>
                             <FormGroup {...(isRequired.adminEmail ? {color: 'danger'}: {})}>
                                 <Input disabled={saving}
                                        type="email"
@@ -119,7 +177,7 @@ class NewApp extends Component {
                                 { isRequired.adminEmail && <FormFeedback>This field is required</FormFeedback>}
                             </FormGroup>
 
-                            <Label>Admin Username</Label>
+                            <Label>Username</Label>
                             <FormGroup {...(isRequired.adminUser ? {color: 'danger'}: {})}>
                                 <Input disabled={saving}
                                        onChange={e => this.onDataChange(e, 'adminUser')}
@@ -127,7 +185,7 @@ class NewApp extends Component {
                                 { isRequired.adminUser && <FormFeedback>This field is required</FormFeedback>}
                             </FormGroup>
 
-                            <Label>Admin Password</Label>
+                            <Label>Password</Label>
                             <FormGroup {...(isRequired.adminPassword ? {color: 'danger'}: {})}>
                                 <Input disabled={saving}
                                        type="password"
@@ -135,7 +193,7 @@ class NewApp extends Component {
                                        autoComplete="off" placeholder="Password"/>
                                 { isRequired.adminPassword && <FormFeedback>This field is required</FormFeedback>}
                             </FormGroup>
-                            <Button type="submit" disabled={saving} onClick={this.submit} color="success">Create</Button>
+                            <Button type="submit" disabled={saving} onClick={this.submit} color="success">Deploy</Button>
                             {' '}
                             <Link to="/" className="btn btn-link">Back</Link>
                         </Form>

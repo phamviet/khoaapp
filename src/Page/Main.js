@@ -18,6 +18,7 @@ import {
 
 import Settings from './Settings';
 import Apps from './App/index';
+import Domain from './Domain/Domain';
 import NewApp from './App/NewApp';
 
 const routes = [
@@ -25,7 +26,12 @@ const routes = [
         path: '/apps',
         exact: true,
         component: Apps,
-        label: 'Apps',
+        label: 'Sites',
+    },
+    {
+        path: '/domains',
+        component: Domain,
+        label: 'Domains',
     },
     {
         path: '/profile',
@@ -77,12 +83,12 @@ class Main extends Component {
                         </Nav>
 
                         <Form inline className="ml-auto">
-                            <Button onClick={() => this.props.history.push('/apps/new')} color="success">Create Site</Button>
+                            <Button onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
                         </Form>
                     </Collapse>
                 </Navbar>
 
-                <div className="pt-3">
+                <div className="mt-4">
                     {this.state.messages.map(({message, color}, index) => (
                         <Alert key={index} color={color}>{message}</Alert>
                     ))}

@@ -8,7 +8,7 @@ function uriFor(path) {
     return '/api' + path;
 }
 
-export default {
+const Api = {
     addAfterWare(handler) {
         afterwares.push(handler);
     },
@@ -28,24 +28,28 @@ export default {
         return response;
     },
 
-    postJson(path, data, options) {
+    post(path, data, options) {
         return this.request('POST', path, data, options);
     },
 
-    getJson(path, queryParams, options) {
+    delete(path, data, options) {
+        return this.request('DELETE', path, data, options);
+    },
+
+    get(path, queryParams, options) {
         return this.request('GET', path, queryParams, options);
     },
 
     profile() {
-        return this.getJson('/profile?full=1')
+        return this.get('/profile?full=1')
     },
 
     getUser(id) {
-        return this.getJson('/user/' + id)
+        return this.get('/user/' + id)
     },
 
     create(name, data) {
-        return this.postJson('/app/create', {name, data})
+        return this.post('/app/create', { name, data })
     },
 
     destroy(id, force = 1) {
@@ -59,4 +63,6 @@ export default {
             headers: requestHeaders
         })
     },
-}
+};
+
+export default Api;

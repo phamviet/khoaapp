@@ -5,13 +5,9 @@
     }
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+h2.head {
+    font-size: 22px;
+    padding-left: 15px;
 }
 
 html,

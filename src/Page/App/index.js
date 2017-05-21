@@ -3,7 +3,6 @@ import {
     Row,
     Col,
     Card, CardBlock,
-    CardTitle,
     Button
 } from 'reactstrap';
 import humanize from 'humanize';
@@ -26,21 +25,17 @@ class AppRow extends Component {
         return (
             <div>
                 <Row>
-                    <Col sm="1">
-
-                    </Col>
-                    <Col sm="5">
+                    <Col sm="8">
                         {app.name}
                         {' '}
                         <a ref="nofollow" target="_blank" href={`http://${app.name}`}>
                             <i className="fa fa-external-link"/>
                         </a>
+                        <br/>
+                        <small className="text-muted">{humanize.relativeTime(app.created_at)}</small>
                     </Col>
 
-                    <Col sm="3">
-                        {humanize.relativeTime(app.created_at)}
-                    </Col>
-                    <Col sm="3" className="text-right">
+                    <Col sm="4" className="text-right">
                         {/*<Button disabled={disabled} outline color="success">Backup</Button>{' '}*/}
                         <Button disabled={disabled} onClick={e => onDestroyClick(e, this.toggleState)} outline color="danger">Destroy</Button>
                     </Col>
@@ -53,6 +48,10 @@ class AppRow extends Component {
 
 class App extends Component {
     onDestroyClick = async (e, app, toggleState) => {
+        if (!confirm('Are you sure you want to destroy this site and agree with data lost?')) {
+            return;
+        }
+
         toggleState();
         const destroy = await api.destroy(app.id);
         if ( destroy.ok ) {
@@ -68,13 +67,13 @@ class App extends Component {
 
         return (
             <div>
+                <h2 className="head">
+                    Sites
+                </h2>
+                <hr/>
+
                 <Card>
                     <CardBlock>
-                        <div style={{ padding: '15px 0' }}>
-                            <CardTitle>
-                                Sites
-                            </CardTitle>
-                        </div>
                         {apps.map(app => (
                             <AppRow key={app.id} app={app} onDestroyClick={(e, toggleState) => this.onDestroyClick(e, app, toggleState)} />
                         ))}
