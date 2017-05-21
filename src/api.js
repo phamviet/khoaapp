@@ -1,6 +1,10 @@
 const afterwares = [];
+const requestHeaders = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+};
 
-function pathToUri(path) {
+function uriFor(path) {
     return '/api' + path;
 }
 
@@ -9,14 +13,11 @@ export default {
         afterwares.push(handler);
     },
 
-    async requestJson (method, path, data = {}, options = {}) {
-        let response = await fetch(pathToUri(path), Object.assign({}, {
+    async request (method, path, data = {}, options = {}) {
+        let response = await fetch(uriFor(path), Object.assign({}, {
             method: method,
             credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
+            headers: requestHeaders,
             body: method !== 'GET' ? JSON.stringify(data) : undefined
         }, options));
 
@@ -28,11 +29,11 @@ export default {
     },
 
     postJson(path, data, options) {
-        return this.requestJson('POST', path, data, options);
+        return this.request('POST', path, data, options);
     },
 
     getJson(path, queryParams, options) {
-        return this.requestJson('GET', path, queryParams, options);
+        return this.request('GET', path, queryParams, options);
     },
 
     profile() {
@@ -48,10 +49,14 @@ export default {
     },
 
     destroy(id, force = 1) {
-        return this.requestJson('DELETE', `/app/${id}?force=${force}`)
+        return this.request('DELETE', `/app/${id}?force=${force}`)
     },
 
-    logout() {
-        return this.postJson('/logout')
+    async logout() {
+        return await fetch('/logout', {
+            method: 'POST',
+            credentials: 'include',
+            headers: requestHeaders
+        })
     },
 }

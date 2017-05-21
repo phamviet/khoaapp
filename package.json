@@ -2,7 +2,7 @@
   "name": "slim-react",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://docker.slim.dev",
+  "proxy": "http://localhost:8001",
   "dependencies": {
     "bootstrap": "4.0.0-alpha.6",
     "font-awesome": "^4.7.0",

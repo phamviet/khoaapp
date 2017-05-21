@@ -3,43 +3,34 @@ import PropTypes from 'prop-types';
 
 import {
     Route,
-    Link,
-    withRouter
+    withRouter,
+    Redirect,
 } from 'react-router-dom'
 
 
-import {
-    Container,
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    Nav, NavItem,
-    Alert,
-    Form,
-    Button,
-} from 'reactstrap';
 import './App.css';
 
 import api from './api';
 
 import Login from './Page/Login';
-import Apps from './Page/App/index';
-import NewApp from './Page/App/NewApp';
-import Settings from './Page/Settings';
+import Main from './Page/Main';
 
 const routes = [
     {
         path: '/',
-        exact: true,
-        component: Apps,
-        label: 'Sites',
+        component: ({ready, ...props}) => {
+            if (!ready) {
+                return <Redirect to='/login' />
+            }
+
+            return <Main {...props}/>
+        },
     },
     {
-        path: '/profile',
-        label: 'Profile',
-        component: Settings,
+        path: '/login',
+        component: Login,
     },
-]
+];
 
 class App extends Component {
     state = {
@@ -47,7 +38,6 @@ class App extends Component {
         ready: false,
         profile: undefined,
         apps: [],
-        messages: [],
     };
 
     static propTypes = {
@@ -67,10 +57,10 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.start();
+        this.startApp();
     }
 
-    async start() {
+    startApp = async () => {
         let state = {};
 
         const response = await api.profile();
@@ -95,13 +85,10 @@ class App extends Component {
     }
 
     resetSession = () => {
-        this.setState({ ready: false });
-        this.props.history.push('/');
+        this.setState({ ready: false }, () => {
+            this.props.history.push('/login');
+        });
     }
-
-    onLoggedIn = () => {
-        this.start();
-    };
 
     updateProfile = profile => {
         this.setState({ profile: { ...this.state.profile, ...profile } });
@@ -115,87 +102,35 @@ class App extends Component {
         this.setState({ apps: this.state.apps.filter(a => a.id !== app.id) });
     };
 
-    toggle = () => {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
-    alert = (message, color, append = false) => {
-        if (this.alertTimeout) {
-            clearTimeout(this.alertTimeout);
-        }
-
-        this.alertTimeout = setTimeout(() => this.setState({ messages: [] }), 5000);
-
-        this.setState({
-            messages: append ? [...this.state.messages, {message, color}] : [{message, color}]
-        });
-    }
-
     render() {
-        const { initializing, ready, profile, apps, messages } = this.state;
+        const { initializing, ready, profile, apps } = this.state;
         if ( initializing ) {
             return null;
         }
 
-        if ( !ready ) {
-            return <Login config={this.props.config} onSuccess={this.onLoggedIn}/>;
-        }
-
         const globalProps = {
             config: this.props.config,
+            ready,
+            startApp: this.startApp,
             profile,
             apps,
             updateProfile: this.updateProfile,
             addApp: this.addApp,
             removeApp: this.removeApp,
             logout: this.logout,
-            alert: this.alert,
         };
 
         return (
-            <Container>
-                <Navbar color="faded" light toggleable>
-                    <NavbarToggler right onClick={this.toggle}/>
-                    <Link className="navbar-brand" to="/">Khoaapp</Link>
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav navbar>
-                            {routes.map((route, index) => (
-                                <NavItem key={index}>
-                                    <Link className="nav-link" to={route.path}>{route.label}</Link>
-                                </NavItem>
-                            ))}
-                        </Nav>
-
-                        <Form inline className="ml-auto">
-                            <Button onClick={() => this.props.history.push('/create')} color="success">Create Site</Button>
-                        </Form>
-                    </Collapse>
-                </Navbar>
-
-                <div className="pt-3">
-                    {messages.map(({message, color}, index) => (
-                        <Alert key={index} color={color}>{message}</Alert>
-                    ))}
-
-                    {routes.map((route, index) => (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            exact={route.exact}
-                            render={props => React.createElement(route.component, { ...props, ...globalProps })}
-                        />
-                    ))}
-
+            <div>
+                {routes.map((route, index) => (
                     <Route
-                        path="/create"
-                        render={props => (
-                            <NewApp {...props} {...globalProps} />
-                        )}
+                        key={index}
+                        path={route.path}
+                        exact={route.exact}
+                        render={props => React.createElement(route.component, {...globalProps, ...props })}
                     />
-                </div>
-            </Container>
+                ))}
+            </div>
         );
     }
 }

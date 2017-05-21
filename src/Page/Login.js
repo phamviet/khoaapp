@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 
 class Login extends Component {
     static propTypes = {
-        onSuccess: PropTypes.func.isRequired
+        onSuccess: PropTypes.func
     }
 
     componentWillMount() {
@@ -38,8 +38,8 @@ class Login extends Component {
         });
 
         if ( res.status === 200 ) {
-            const data = await res.json();
-            this.props.onSuccess(data);
+            await this.props.startApp();
+            this.props.history.push('/');
         }
     };
 
