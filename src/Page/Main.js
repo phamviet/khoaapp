@@ -66,12 +66,12 @@ class Main extends Component {
         return (
             <div>
                 <Navbar color="faded" light toggleable>
-                    <NavbarToggler left onClick={() => {
-                        this.setState({
-                            openNav: !this.state.openNav
-                        });
-                    }}/>
                     <Container>
+                        <NavbarToggler right onClick={() => {
+                            this.setState({
+                                openNav: !this.state.openNav
+                            });
+                        }}/>
                         <Link className="navbar-brand" to="/">Khoaapp</Link>
 
                         <Collapse isOpen={this.state.openNav} navbar>
@@ -88,8 +88,6 @@ class Main extends Component {
                             </Form>
                         </Collapse>
                     </Container>
-
-
                 </Navbar>
 
                 <Container>
