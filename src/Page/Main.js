@@ -64,7 +64,7 @@ class Main extends Component {
             alert: this.alert,
         };
         return (
-            <Container>
+            <div>
                 <Navbar color="faded" light toggleable>
                     <NavbarToggler right onClick={() => {
                         this.setState({
@@ -72,50 +72,58 @@ class Main extends Component {
                         });
                     }}/>
 
-                    <Link className="navbar-brand" to="/">Khoaapp</Link>
-                    <Collapse isOpen={this.state.openNav} navbar>
-                        <Nav navbar>
-                            {routes.map((route, index) => (
-                                <NavItem key={index}>
-                                    <Link className="nav-link" to={route.path}>{route.label}</Link>
-                                </NavItem>
-                            ))}
-                        </Nav>
+                    <Container>
+                        <Link className="navbar-brand" to="/">Khoaapp</Link>
 
-                        <Form inline className="ml-auto">
-                            <Button onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
-                        </Form>
-                    </Collapse>
+                        <Collapse isOpen={this.state.openNav} navbar>
+                            <Nav navbar>
+                                {routes.map((route, index) => (
+                                    <NavItem key={index}>
+                                        <Link className="nav-link" to={route.path}>{route.label}</Link>
+                                    </NavItem>
+                                ))}
+                            </Nav>
+
+                            <Form inline className="ml-auto hidden-sm-down">
+                                <Button onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
+                            </Form>
+                        </Collapse>
+                    </Container>
+
+
                 </Navbar>
 
-                <div className="mt-4">
-                    {this.state.messages.map(({message, color}, index) => (
-                        <Alert key={index} color={color}>{message}</Alert>
-                    ))}
+                <Container>
+                    <Button className="mt-2 hidden-sm-up" block onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
+                    <div className="mt-4">
+                        {this.state.messages.map(({message, color}, index) => (
+                            <Alert key={index} color={color}>{message}</Alert>
+                        ))}
 
-                    <Route
-                        path="/"
-                        exact={true}
-                        render={props => <Redirect to="/apps"/>}
-                    />
-
-                    {routes.map((route, index) => (
                         <Route
-                            key={index}
-                            path={route.path}
-                            exact={route.exact}
-                            render={props => React.createElement(route.component, { ...globalProps, ...props })}
+                            path="/"
+                            exact={true}
+                            render={props => <Redirect to="/apps"/>}
                         />
-                    ))}
 
-                    <Route
-                        path="/apps/new"
-                        render={props => (
-                            <NewApp {...globalProps} {...props} />
-                        )}
-                    />
-                </div>
-            </Container>
+                        {routes.map((route, index) => (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                exact={route.exact}
+                                render={props => React.createElement(route.component, { ...globalProps, ...props })}
+                            />
+                        ))}
+
+                        <Route
+                            path="/apps/new"
+                            render={props => (
+                                <NewApp {...globalProps} {...props} />
+                            )}
+                        />
+                    </div>
+                </Container>
+            </div>
         );
     }
 }

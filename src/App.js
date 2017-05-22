@@ -8,8 +8,6 @@ import {
 } from 'react-router-dom'
 
 
-import './App.css';
-
 import api from './api';
 
 import Login from './Page/Login';
@@ -121,7 +119,7 @@ class App extends Component {
         };
 
         return (
-            <div>
+            <div style={{height: '100%'}}>
                 {routes.map((route, index) => (
                     <Route
                         key={index}

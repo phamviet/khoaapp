@@ -1,19 +1,45 @@
-
-@media (min-width: 48em) {
-    .container {
-        max-width: 1000px;
-    }
+body {
+    font-weight: 300;
 }
 
-h2.head {
-    font-size: 22px;
-    padding-left: 15px;
-}
+
+
 
 html,
-body, #root {
+body, #root, .Page-login {
     background-color: white;
     height: 100%;
+}
+
+input, textarea, select, button, h5, h6, .btn, .input-group-addon {
+    font-weight: 300;
+}
+
+.btn, .form-control, .input-group-addon {
+    border-radius: 0;
+}
+
+.btn {
+    cursor: pointer;
+    /*padding: 0.5rem 1rem;*/
+    /*font-size: 0.9rem;*/
+}
+
+.Page-login form {
+    min-width: 300px;
+}
+
+.card-title, .head {
+    font-size: 22px;
+    font-weight: 300;
+}
+
+dt {
+    font-weight: 500;
+}
+
+.navbar-nav a {
+    font-weight: 300;
 }
 
 .cover-wrapper {
@@ -33,6 +59,13 @@ body, #root {
     margin-right: auto;
     margin-left: auto;
 }
+
+@media (min-width: 48em) {
+    .container {
+        max-width: 1000px;
+    }
+}
+
 
 @media (min-width: 40em) {
     /* Start the vertical centering */

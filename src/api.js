@@ -56,6 +56,14 @@ const Api = {
         return this.request('DELETE', `/app/${id}?force=${force}`)
     },
 
+    login(email, password) {
+        return fetch('/login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: requestHeaders,
+            body: JSON.stringify({email, password})
+        })
+    },
     async logout() {
         return await fetch('/logout', {
             method: 'POST',

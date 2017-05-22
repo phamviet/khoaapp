@@ -24,7 +24,7 @@ class PromoCode extends Component {
         const code = this.state.code;
 
         this.setState({ disabled: true });
-        const response = await api.postJson(`/promos/apply/${code}`);
+        const response = await api.post(`/promos/apply/${code}`);
 
         if ( response.ok ) {
             const { balance } = await response.json();
@@ -39,7 +39,7 @@ class PromoCode extends Component {
     render() {
         const { code, disabled, error, invalid } = this.state;
         return (
-            <Card className="mt-4">
+            <Card className="my-4">
                 <CardBlock>
                     <CardTitle>
                         Promo code
@@ -47,17 +47,21 @@ class PromoCode extends Component {
                     <CardText>
                         If you have a promo code, please enter it below to receive your credit.
                     </CardText>
-                    <Form inline onSubmit={this.applyCode}>
-                        <FormGroup {...(error ? { color: 'danger' } : {})}>
-                            <Input value={code}
-                                   onChange={e => this.setState({ code: e.target.value, error: '' })}
-                                   size="lg" placeholder="Promo code"/>
+                    <Form onSubmit={this.applyCode}>
+                        <FormGroup row {...(error ? { color: 'danger' } : {})}>
+                            <Col xs={12} sm={8}>
+                                <Input value={code}
+                                       onChange={e => this.setState({ code: e.target.value, error: '' })}
+                                       size="lg" placeholder="Promo code"/>
+                                { !!error && <FormFeedback className="text-danger">{error}</FormFeedback>}
+                            </Col>
+                            <Col xs={12} sm={4} className="mt-2 mt-sm-0">
+                                <Button block disabled={!code || disabled || invalid.hasOwnProperty(code)}
+                                        onClick={this.applyCode}
+                                        size="lg" color="success">Apply code</Button>
+                            </Col>
                         </FormGroup>
-                        <Button disabled={!code || disabled || invalid.hasOwnProperty(code)}
-                                onClick={this.applyCode}
-                                className="ml-2" size="lg" color="success">Apply code</Button>
                     </Form>
-                    { !!error && <FormFeedback className="text-danger">{error}</FormFeedback>}
                 </CardBlock>
             </Card>
         );
@@ -75,7 +79,7 @@ class Profile extends Component {
         return (
             <div>
                 <Row>
-                    <Col sm="6">
+                    <Col xs="12" sm="6">
                         <Card>
                             <CardBlock style={{ height: '216px' }}>
                                 <dl className="">
@@ -91,7 +95,7 @@ class Profile extends Component {
                             </CardBlock>
                         </Card>
                     </Col>
-                    <Col sm="6">
+                    <Col xs="12" sm="6" className="mt-4 mt-sm-0">
                         <Card>
                             <CardBlock style={{ height: '216px' }}>
                                 <div style={{ padding: '15px 0' }}>

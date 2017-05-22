@@ -7,6 +7,7 @@ import {
 import { Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
 
 import Profile from './Settings/Profile';
+import Security from './Settings/Security';
 
 
 const routes = [
@@ -16,6 +17,11 @@ const routes = [
         component: Profile,
         label: 'Profile',
     },
+    {
+        path: '/security',
+        component: Security,
+        label: 'Security',
+    },
 ]
 
 class Settings extends Component {
@@ -24,7 +30,7 @@ class Settings extends Component {
 
         return (
             <Row>
-                <Col xs="4" sm="3">
+                <Col xs="12" sm="3" className="mb-3">
                     <Nav vertical>
                         {routes.map((route, index) => (
                             <NavItem key={index}>
@@ -36,7 +42,7 @@ class Settings extends Component {
                         </NavItem>
                     </Nav>
                 </Col>
-                <Col xs="8" sm="9">
+                <Col xs="12" sm="9">
                     {routes.map((route, index) => (
                         <Route
                             key={index}
