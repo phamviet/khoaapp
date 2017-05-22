@@ -100,17 +100,15 @@ class Profile extends Component {
                             <CardBlock style={{ height: '216px' }}>
                                 <CardTitle>
                                     Your credit
-                                    <div className="float-right text-right">
+                                    <span className="float-right text-right">
                                         ${profile.balance}
-                                    </div>
+                                    </span>
                                 </CardTitle>
+                                <br/>
                                 <CardText>
-                                    <br/>
-                                    <p>
-                                        Add <strong>$200</strong> PayPal credit to your account.
-                                    </p>
-                                    <PaypalButton env={config.paypalMode} onSuccess={this.onCreditAdded}/>
+                                    Add <strong>$200</strong> PayPal credit to your account.
                                 </CardText>
+                                <PaypalButton env={config.paypalMode} onSuccess={this.onCreditAdded}/>
                             </CardBlock>
                         </Card>
                     </Col>
