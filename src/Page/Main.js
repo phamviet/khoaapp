@@ -66,12 +66,11 @@ class Main extends Component {
         return (
             <div>
                 <Navbar color="faded" light toggleable>
-                    <NavbarToggler right onClick={() => {
+                    <NavbarToggler left onClick={() => {
                         this.setState({
                             openNav: !this.state.openNav
                         });
                     }}/>
-
                     <Container>
                         <Link className="navbar-brand" to="/">Khoaapp</Link>
 
@@ -95,7 +94,9 @@ class Main extends Component {
 
                 <Container>
                     <Button className="mt-2 hidden-sm-up" block onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
-                    <div className="mt-4">
+
+                    <div className="py-3">
+
                         {this.state.messages.map(({message, color}, index) => (
                             <Alert key={index} color={color}>{message}</Alert>
                         ))}

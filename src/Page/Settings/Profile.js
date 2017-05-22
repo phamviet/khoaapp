@@ -39,7 +39,7 @@ class PromoCode extends Component {
     render() {
         const { code, disabled, error, invalid } = this.state;
         return (
-            <Card className="my-4">
+            <Card className="mt-3">
                 <CardBlock>
                     <CardTitle>
                         Promo code
@@ -95,21 +95,22 @@ class Profile extends Component {
                             </CardBlock>
                         </Card>
                     </Col>
-                    <Col xs="12" sm="6" className="mt-4 mt-sm-0">
+                    <Col xs="12" sm="6" className="mt-3 mt-sm-0">
                         <Card>
                             <CardBlock style={{ height: '216px' }}>
-                                <div style={{ padding: '15px 0' }}>
-                                    <CardTitle>
-                                        Your credit
-
-                                        <div className="float-md-right text-right">
-                                            ${profile.balance}
-                                        </div>
-                                    </CardTitle>
-                                </div>
-                                <div className="p-3">
+                                <CardTitle>
+                                    Your credit
+                                    <div className="float-right text-right">
+                                        ${profile.balance}
+                                    </div>
+                                </CardTitle>
+                                <CardText>
+                                    <br/>
+                                    <p>
+                                        Add <strong>$200</strong> PayPal credit to your account.
+                                    </p>
                                     <PaypalButton env={config.paypalMode} onSuccess={this.onCreditAdded}/>
-                                </div>
+                                </CardText>
                             </CardBlock>
                         </Card>
                     </Col>

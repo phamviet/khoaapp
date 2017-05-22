@@ -33,6 +33,7 @@ class Login extends Component {
 
     login = async (e) => {
         e.preventDefault();
+        console.log('login');
 
         if ( !this.isValid() ) {
             return;
@@ -43,6 +44,7 @@ class Login extends Component {
         const res = await api.login(email, password);
 
         this.setState({ signing: false });
+
         if (res.ok) {
             await this.props.startApp();
             this.props.history.push('/');
@@ -90,7 +92,7 @@ class Login extends Component {
         const { signing, email, password, error } = this.state;
 
         return (
-            <div>
+            <div className="Page-login">
                 <div className="mx-auto text-center" style={{ maxWidth: '300px' }}>
                     <h1 className="py-5 text-muted" style={{ fontWeight: 200 }}>Khoaapp</h1>
 
@@ -122,9 +124,9 @@ class Login extends Component {
                                        autoComplete="off" placeholder="Password"/>
                             </InputGroup>
                         </FormGroup>
-                        <Button block disabled={signing || !this.isValid()}
-                                onClick={this.login}
-                        >Sign in</Button>
+                        <Button block type="submit"
+                                disabled={signing || !this.isValid()}
+                                onClick={this.login}>Sign in</Button>
                     </Form>
 
                     <hr/>

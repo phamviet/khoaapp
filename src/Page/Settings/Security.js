@@ -29,6 +29,7 @@ class UpdatePassword extends Component {
 
         if ( response.ok ) {
             this.props.alert(`Password updated successfully`);
+            this.setState({ current_password: '', new_password: '' });
             this.props.updateProfile({ password_updated_at: json.password_updated_at });
         } else {
             this.props.alert(json.message, 'danger');

@@ -19,6 +19,11 @@ input, textarea, select, button, h5, h6, .btn, .input-group-addon {
     border-radius: 0;
 }
 
+.form-control, .input-group-addon {
+    border-radius: 0;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
 .btn {
     cursor: pointer;
     /*padding: 0.5rem 1rem;*/
@@ -27,6 +32,15 @@ input, textarea, select, button, h5, h6, .btn, .input-group-addon {
 
 .Page-login form {
     min-width: 300px;
+}
+
+.Page-login .btn-secondary {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.Page-login .btn-secondary:hover {
+    background-color: transparent;
+    border-color: #5cb3fd;
 }
 
 .card-title, .head {
@@ -40,45 +54,4 @@ dt {
 
 .navbar-nav a {
     font-weight: 300;
-}
-
-.cover-wrapper {
-    display: table;
-    width: 100%;
-    height: 100%; /* For at least Firefox */
-    min-height: 100%;
-}
-
-.cover-wrapper-inner {
-    display: table-cell;
-    vertical-align: top;
-    text-align: center;
-}
-
-.cover-container {
-    margin-right: auto;
-    margin-left: auto;
-}
-
-@media (min-width: 48em) {
-    .container {
-        max-width: 1000px;
-    }
-}
-
-
-@media (min-width: 40em) {
-    /* Start the vertical centering */
-    .cover-wrapper-inner {
-        vertical-align: middle;
-    }
-    .cover-container {
-        width: 100%; /* Must be percentage or pixels for horizontal alignment */
-    }
-}
-
-@media (min-width: 62em) {
-    .cover-container {
-        width: 62rem;
-    }
 }

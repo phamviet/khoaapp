@@ -25,7 +25,7 @@ class AppRow extends Component {
         return (
             <div>
                 <Row>
-                    <Col sm="8">
+                    <Col xs={12} sm="8">
                         {app.name}
                         {' '}
                         <a ref="nofollow" target="_blank" href={`http://${app.name}`}>
@@ -35,7 +35,7 @@ class AppRow extends Component {
                         <small className="text-muted">{humanize.relativeTime(app.created_at)}</small>
                     </Col>
 
-                    <Col sm="4" className="text-right">
+                    <Col sm="4" className="text-right hidden-xs-down">
                         {/*<Button disabled={disabled} outline color="success">Backup</Button>{' '}*/}
                         <Button disabled={disabled} onClick={e => onDestroyClick(e, this.toggleState)} outline color="danger">Destroy</Button>
                     </Col>
