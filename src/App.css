@@ -2,9 +2,6 @@ body {
     font-weight: 300;
 }
 
-
-
-
 html,
 body, #root, .Page-login {
     background-color: white;
@@ -54,4 +51,15 @@ dt {
 
 .navbar-nav a {
     font-weight: 300;
+}
+
+.card-apps {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px 0;
+}
+
+.card-apps .card {
+    /*max-width: 250px;*/
+    cursor: pointer;
 }

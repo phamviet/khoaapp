@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import {
-    Card,
-    CardBlock,
-    CardTitle
-} from 'reactstrap';
+
 import {
     Link,
 } from 'react-router-dom'
 
-import { Button, Label, Form, FormGroup, FormText, FormFeedback, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import {
+    Button, Label,
+    Form, FormGroup, FormText, FormFeedback,
+    Input, InputGroup, InputGroupAddon,
+    Card, CardBlock, CardTitle, CardImg, CardDeck, CardText
+} from 'reactstrap';
+import FontAwesome from 'react-fontawesome';
+
 import api from '../../api';
+import wordpressLogo from '../../assets/wordpress-logo.png';
 
 class NewApp extends Component {
     state = {
@@ -17,6 +21,8 @@ class NewApp extends Component {
         submitted: false,
         data: {
             domain: '',
+            type: 1,
+            wildcard: false,
             subdomain: '',
             blogTitle: 'My Blog',
             adminEmail: '',
@@ -37,17 +43,25 @@ class NewApp extends Component {
 
     async loadDomainList() {
         const res = await api.get('/domain');
-        if (res.ok) {
+        if ( res.ok ) {
             const domains = await res.json();
             const domain = domains.length === 1 ? domains[0]['name'] : this.state.domain;
 
-            this.setState({domains, data: {...this.state.data, domain}})
+            this.setState({ domains, data: { ...this.state.data, domain } })
         }
     };
 
     onDataChange = (e, name) => {
         const value = e.target.value;
-        this.setState({ data: {...this.state.data, [name]: value} }, () => this.state.submitted && this.validate());
+        this.setState({ data: { ...this.state.data, [name]: value } }, () => this.state.submitted && this.validate());
+    };
+
+    toggleWildcard = () => {
+        this.setState({ data: { ...this.state.data, wildcard: !this.state.data.wildcard } });
+    };
+
+    setAppType = (val) => {
+        this.setState({ data: { ...this.state.data, type: val } });
     };
 
     submit = async (e) => {
@@ -55,11 +69,11 @@ class NewApp extends Component {
 
         const { history, alert, addApp, profile, updateProfile } = this.props;
 
-        const {data} = this.state;
+        const { data } = this.state;
 
         this.setState({ submitted: true });
 
-        if (!this.validate()) {
+        if ( !this.validate() ) {
             return;
         }
 
@@ -68,20 +82,20 @@ class NewApp extends Component {
         const response = await api.post('/app/create', data);
         const json = await response.json();
 
-        if (response.ok) {
+        if ( response.ok ) {
             addApp(json);
             alert(`Your site ${json.name} was deployed successfully.`);
 
             // Update credit
             const res = await api.getUser(profile.id);
-            if (res.ok) {
+            if ( res.ok ) {
                 const data = await res.json();
                 updateProfile(data);
             }
 
             this.setState({ saving: false, submitted: false }, () => history.push('/'));
         } else {
-            if (response.status > 400 && response.status < 500) {
+            if ( response.status > 400 && response.status < 500 ) {
                 alert(json.message || '', 'danger');
             }
 
@@ -90,12 +104,12 @@ class NewApp extends Component {
     };
 
     validate() {
-        const {data} = this.state;
-        const { subdomain, ...requiredFields } = data;
+        const { data } = this.state;
 
+        const requiredFields = data.type === 1 ? ['domain', 'blogTitle', 'adminEmail', 'adminUser', 'adminPassword'] : ['domain'];
         let isRequired = {};
 
-        Object.keys(requiredFields).forEach(field => {
+        requiredFields.forEach(field => {
             if ( !data[field] ) {
                 isRequired[field] = true;
             }
@@ -105,6 +119,7 @@ class NewApp extends Component {
 
         return Object.keys(isRequired).length === 0;
     }
+
     render() {
         const { saving, isRequired, domains, data } = this.state;
 
@@ -115,7 +130,7 @@ class NewApp extends Component {
                         <CardTitle>New site</CardTitle>
                         <hr/>
                         <Form onSubmit={this.submit}>
-                            <FormGroup {...(isRequired.domain ? {color: 'danger'}: {})}>
+                            <FormGroup {...(isRequired.domain ? { color: 'danger' } : {})}>
                                 <Label>Domain</Label>
                                 <Input type="select"
                                        disabled={saving}
@@ -136,66 +151,99 @@ class NewApp extends Component {
 
                             </FormGroup>
                             {data.domain && (
-                                <FormGroup>
-                                    <Label>Subdomain</Label>
-                                    <InputGroup>
-                                        <Input
-                                            placeholder="Optional"
-                                            disabled={saving}
-                                            value={data.subdomain}
-                                            onChange={e => this.onDataChange(e, 'subdomain')}
-                                        />
-                                        <InputGroupAddon>.{data.domain}</InputGroupAddon>
-                                    </InputGroup>
-                                    <FormText color="muted">
-                                        Leave blank to use chose domain.
-                                    </FormText>
-                                </FormGroup>
+                                <div>
+                                    <FormGroup>
+                                        <Label>Subdomain</Label>
+                                        <InputGroup>
+                                            <Input
+                                                placeholder="Optional"
+                                                disabled={saving}
+                                                value={data.subdomain}
+                                                onChange={e => this.onDataChange(e, 'subdomain')}
+                                            />
+                                            <InputGroupAddon>.{data.domain}</InputGroupAddon>
+                                        </InputGroup>
+                                        <FormText color="muted">
+                                            Leave blank to use chose domain.
+                                        </FormText>
+                                    </FormGroup>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input onClick={() => this.toggleWildcard()} checked={data.wildcard} type="checkbox" />{' '}
+                                            Wildcard match
+                                        </Label>
+                                    </FormGroup>
+                                </div>
+
                             )}
 
-                            <h5 className="mt-4">Site setup</h5>
+                            <h5 className="mt-4">Choose app</h5>
                             <hr/>
+                            <div className="card-apps">
+                                <CardDeck>
+                                    <Card onClick={() => this.setAppType(1) } block outline color={data.type === 1 ? 'info' : ''} className="text-center mb-3 mb-sm-0">
+                                        <CardImg top width="199" src={wordpressLogo} alt="Wordpress"/>
+                                    </Card>
 
-                            <Label>Site title</Label>
-                            <FormGroup {...(isRequired.blogTitle ? {color: 'danger'}: {})}>
-                                <Input disabled={saving}
-                                       value={data.blogTitle}
-                                       onChange={e => this.onDataChange(e, 'blogTitle')}
-                                       autoComplete="off" />
-                                { isRequired.blogTitle && <FormFeedback>This field is required</FormFeedback>}
-                            </FormGroup>
+                                    <Card onClick={() => this.setAppType(0) } block outline color={data.type === 0 ? 'info' : ''} className="text-center">
+                                        <FontAwesome name='cubes' size="4x" />
+                                        <br/>
+                                        <CardTitle>PHP / Apache</CardTitle>
+                                    </Card>
+                                </CardDeck>
 
-                            <h5 className="mt-4">Admin account</h5>
-                            <hr/>
-                            <Label>Email</Label>
-                            <FormGroup {...(isRequired.adminEmail ? {color: 'danger'}: {})}>
-                                <Input disabled={saving}
-                                       type="email"
-                                       value={data.adminEmail}
-                                       onChange={e => this.onDataChange(e, 'adminEmail')}
-                                       autoComplete="off" placeholder="Email"/>
-                                { isRequired.adminEmail && <FormFeedback>This field is required</FormFeedback>}
-                            </FormGroup>
+                            </div>
 
-                            <Label>Username</Label>
-                            <FormGroup {...(isRequired.adminUser ? {color: 'danger'}: {})}>
-                                <Input disabled={saving}
-                                       onChange={e => this.onDataChange(e, 'adminUser')}
-                                       autoComplete="off" placeholder="Username"/>
-                                { isRequired.adminUser && <FormFeedback>This field is required</FormFeedback>}
-                            </FormGroup>
+                            {data.type === 1 ? (
+                                <div>
+                                    <h5 className="mt-4">Wordpress setup</h5>
+                                    <hr/>
 
-                            <Label>Password</Label>
-                            <FormGroup {...(isRequired.adminPassword ? {color: 'danger'}: {})}>
-                                <Input disabled={saving}
-                                       type="password"
-                                       onChange={e => this.onDataChange(e, 'adminPassword')}
-                                       autoComplete="off" placeholder="Password"/>
-                                { isRequired.adminPassword && <FormFeedback>This field is required</FormFeedback>}
-                            </FormGroup>
-                            <Button type="submit" disabled={saving} onClick={this.submit} color="success">Deploy</Button>
-                            {' '}
-                            <Link to="/" className="btn btn-link">Back</Link>
+                                    <Label>Site title</Label>
+                                    <FormGroup {...(isRequired.blogTitle ? { color: 'danger' } : {})}>
+                                        <Input disabled={saving}
+                                               value={data.blogTitle}
+                                               onChange={e => this.onDataChange(e, 'blogTitle')}
+                                               autoComplete="off"/>
+                                        { isRequired.blogTitle && <FormFeedback>Site title is required</FormFeedback>}
+                                    </FormGroup>
+
+                                    <Label>Admin email</Label>
+                                    <FormGroup {...(isRequired.adminEmail ? { color: 'danger' } : {})}>
+                                        <Input disabled={saving}
+                                               type="email"
+                                               value={data.adminEmail}
+                                               onChange={e => this.onDataChange(e, 'adminEmail')}
+                                               autoComplete="off" placeholder="Email"/>
+                                        { isRequired.adminEmail && <FormFeedback>Admin email is required</FormFeedback>}
+                                    </FormGroup>
+
+                                    <Label>Admin user</Label>
+                                    <FormGroup {...(isRequired.adminUser ? { color: 'danger' } : {})}>
+                                        <Input disabled={saving}
+                                               onChange={e => this.onDataChange(e, 'adminUser')}
+                                               autoComplete="off" placeholder="Username"/>
+                                        { isRequired.adminUser && <FormFeedback>Admin user is required</FormFeedback>}
+                                    </FormGroup>
+
+                                    <Label>Admin password</Label>
+                                    <FormGroup {...(isRequired.adminPassword ? { color: 'danger' } : {})}>
+                                        <Input disabled={saving}
+                                               type="password"
+                                               onChange={e => this.onDataChange(e, 'adminPassword')}
+                                               autoComplete="off" placeholder="Password"/>
+                                        { isRequired.adminPassword && <FormFeedback>Admin password is required</FormFeedback>}
+                                    </FormGroup>
+                                </div>
+                            ) : <br/>}
+
+
+                            <div className="text-center">
+                                <Button type="submit" disabled={saving} onClick={this.submit}
+                                        color="success">Deploy</Button>
+                                {' '}
+                                <Link to="/" className="btn btn-link">Back</Link>
+                            </div>
                         </Form>
                     </CardBlock>
                 </Card>
