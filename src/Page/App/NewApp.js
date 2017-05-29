@@ -8,7 +8,7 @@ import {
     Button, Label,
     Form, FormGroup, FormText, FormFeedback,
     Input, InputGroup, InputGroupAddon,
-    Card, CardBlock, CardTitle, CardImg, CardDeck, CardText
+    Card, CardBlock, CardTitle, CardImg, CardDeck
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 

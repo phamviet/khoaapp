@@ -20,6 +20,7 @@ import Settings from './Settings';
 import Apps from './App/index';
 import Domain from './Domain/Domain';
 import NewApp from './App/NewApp';
+import AppDetail from './App/Detail';
 
 const routes = [
     {
@@ -27,16 +28,23 @@ const routes = [
         exact: true,
         component: Apps,
         label: 'Sites',
+        nav: true,
+    },
+    {
+        path: '/app/:id',
+        component: AppDetail,
     },
     {
         path: '/domains',
         component: Domain,
         label: 'Domains',
+        nav: true,
     },
     {
         path: '/profile',
         component: Settings,
         label: 'Profile',
+        nav: true,
     },
 ]
 
@@ -76,7 +84,7 @@ class Main extends Component {
 
                         <Collapse isOpen={this.state.openNav} navbar>
                             <Nav navbar>
-                                {routes.map((route, index) => (
+                                {routes.filter(r => r.nav).map((route, index) => (
                                     <NavItem key={index}>
                                         <Link className="nav-link" to={route.path}>{route.label}</Link>
                                     </NavItem>

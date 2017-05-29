@@ -6,7 +6,7 @@ import {
     Button
 } from 'reactstrap';
 import humanize from 'humanize';
-
+import { Link } from 'react-router-dom'
 import api from '../../api';
 
 class AppRow extends Component {
@@ -26,7 +26,7 @@ class AppRow extends Component {
             <div>
                 <Row>
                     <Col xs={12} sm="8">
-                        {app.name}
+                        <Link to={`/app/${app.id}`}>{app.name}</Link>
                         {' '}
                         <a ref="nofollow" target="_blank" href={`http://${app.name}`}>
                             <i className="fa fa-external-link"/>
