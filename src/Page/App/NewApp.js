@@ -6,7 +6,7 @@ import {
 
 import {
     Button, Label,
-    Form, FormGroup, FormText, FormFeedback,
+    Form, FormGroup, FormFeedback,
     Input, InputGroup, InputGroupAddon,
     Card, CardBlock, CardTitle, CardImg, CardDeck
 } from 'reactstrap';
@@ -163,18 +163,8 @@ class NewApp extends Component {
                                             />
                                             <InputGroupAddon>.{data.domain}</InputGroupAddon>
                                         </InputGroup>
-                                        <FormText color="muted">
-                                            Leave blank to use chose domain.
-                                        </FormText>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input onClick={() => this.toggleWildcard()} checked={data.wildcard} type="checkbox" />{' '}
-                                            Wildcard match
-                                        </Label>
                                     </FormGroup>
                                 </div>
-
                             )}
 
                             <h5 className="mt-4">Choose app</h5>
@@ -182,13 +172,17 @@ class NewApp extends Component {
                             <div className="card-apps">
                                 <CardDeck>
                                     <Card onClick={() => this.setAppType(1) } block outline color={data.type === 1 ? 'info' : ''} className="text-center mb-3 mb-sm-0">
-                                        <CardImg top width="199" src={wordpressLogo} alt="Wordpress"/>
+                                        <CardImg className="m-auto" top width="199" src={wordpressLogo} alt="Wordpress"/>
+                                    </Card>
+
+                                    <Card onClick={() => this.setAppType(2) } block outline color={data.type === 2 ? 'info' : ''} className="text-center mb-3 mb-sm-0">
+                                        <CardImg className="m-auto" top width="199" src="https://ghost.org/logo.svg" alt="Ghost"/>
                                     </Card>
 
                                     <Card onClick={() => this.setAppType(0) } block outline color={data.type === 0 ? 'info' : ''} className="text-center">
                                         <FontAwesome name='cubes' size="4x" />
                                         <br/>
-                                        <CardTitle>PHP / Apache</CardTitle>
+                                        <CardTitle>Empty</CardTitle>
                                     </Card>
                                 </CardDeck>
 
@@ -235,7 +229,23 @@ class NewApp extends Component {
                                         { isRequired.adminPassword && <FormFeedback>Admin password is required</FormFeedback>}
                                     </FormGroup>
                                 </div>
-                            ) : <br/>}
+                            )
+                                : data.type === 0 ? (
+                                    <div>
+                                        <h5 className="mt-4">App settings</h5>
+                                        <hr/>
+                                        {data.domain && (
+                                            <div>
+                                                <FormGroup check>
+                                                    <Label check>
+                                                        <Input onClick={() => this.toggleWildcard()} checked={data.wildcard} type="checkbox" />{' '}
+                                                        Multi sites domain
+                                                    </Label>
+                                                </FormGroup>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : <br/>}
 
 
                             <div className="text-center">

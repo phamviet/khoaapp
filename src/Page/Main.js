@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 import {
     Route,
-    Link,
     Redirect,
 } from 'react-router-dom'
 
 import {
     Container,
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    Nav, NavItem,
     Alert,
-    Form,
     Button,
 } from 'reactstrap';
 
+import Navbar from '../Component/Navbar';
 import Settings from './Settings';
 import Apps from './App/index';
 import Domain from './Domain/Domain';
@@ -50,7 +45,6 @@ const routes = [
 
 class Main extends Component {
     state = {
-        openNav: false,
         messages: [],
     };
 
@@ -67,36 +61,20 @@ class Main extends Component {
     }
 
     render() {
+        const { history } = this.props;
+
         const globalProps = {
             ...this.props,
             alert: this.alert,
         };
         return (
             <div>
-                <Navbar color="faded" light toggleable>
-                    <Container>
-                        <NavbarToggler right onClick={() => {
-                            this.setState({
-                                openNav: !this.state.openNav
-                            });
-                        }}/>
-                        <Link className="navbar-brand" to="/">Khoaapp</Link>
-
-                        <Collapse isOpen={this.state.openNav} navbar>
-                            <Nav navbar>
-                                {routes.filter(r => r.nav).map((route, index) => (
-                                    <NavItem key={index}>
-                                        <Link className="nav-link" to={route.path}>{route.label}</Link>
-                                    </NavItem>
-                                ))}
-                            </Nav>
-
-                            <Form inline className="ml-auto hidden-sm-down">
-                                <Button onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>
-                            </Form>
-                        </Collapse>
-                    </Container>
-                </Navbar>
+                <Navbar
+                    routes={routes}
+                    onBrandClick={() => history.push('/')}
+                    onNavClick={path => history.push(path)}
+                    onButtonClick={() => history.push('/apps/new')}
+                />
 
                 <Container>
                     <Button className="mt-2 hidden-sm-up" block onClick={() => this.props.history.push('/apps/new')} color="success">New Site</Button>

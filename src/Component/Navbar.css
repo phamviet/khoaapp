@@ -1,0 +1,16 @@
+.navbar-nav .nav-item {
+    /*text-align: center;*/
+}
+
+.navbar-nav a {
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.navbar-light .navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler button:focus {
+    outline-width: 0 !important;
+}

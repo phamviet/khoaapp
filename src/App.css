@@ -49,12 +49,8 @@ dt {
     font-weight: 500;
 }
 
-.navbar-nav a {
-    font-weight: 300;
-}
-
 .card-apps {
-    max-width: 500px;
+    max-width: 900px;
     margin: auto;
     padding: 20px 0;
 }

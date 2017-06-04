@@ -106,7 +106,7 @@ export default class Domain extends Component {
         return (
             <div>
                 <h2 className="head">
-                    Domain List
+                    Domains
                     { history.location.pathname === '/domains'
                     && <Button
                         className="ml-3"
