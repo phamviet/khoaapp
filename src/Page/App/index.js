@@ -25,19 +25,19 @@ class AppRow extends Component {
         return (
             <div>
                 <Row>
-                    <Col xs={12} sm="8">
+                    <Col sm={8}>
                         <Link to={`/app/${app.id}`}>{app.name}</Link>
                         {' '}
-                        <a ref="nofollow" target="_blank" href={`http://${app.name}`}>
+                        <a ref="nofollow" target="_blank" href={`https://${app.name}`}>
                             <i className="fa fa-external-link"/>
                         </a>
                         <br/>
                         <small className="text-muted">{humanize.relativeTime(app.created_at)}</small>
                     </Col>
 
-                    <Col sm="4" className="text-right hidden-xs-down">
+                    <Col sm={4} className="text-right">
                         {/*<Button disabled={disabled} outline color="success">Backup</Button>{' '}*/}
-                        <Button disabled={disabled} onClick={e => onDestroyClick(e, this.toggleState)} outline color="danger">Destroy</Button>
+                        <Button  disabled={disabled} onClick={e => onDestroyClick(e, this.toggleState)} outline color="danger">Destroy</Button>
                     </Col>
                 </Row>
                 <hr/>

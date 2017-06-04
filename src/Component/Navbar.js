@@ -42,7 +42,7 @@ export default class extends Component {
                     <Collapse isOpen={this.state.open} navbar>
                         <Nav navbar>
                             {routes.filter(r => r.nav).map((route, index) => (
-                                <NavItem key={index}>
+                                <NavItem key={index} className="text-center">
                                     <NavLink onClick={() => onNavClick(route.path)}>{route.label}</NavLink>
                                 </NavItem>
                             ))}
