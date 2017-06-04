@@ -38,7 +38,7 @@ export default class extends Component {
                 }}/>
 
                 <Container>
-                    <NavbarBrand href="#" onClick={() => onBrandClick}>Blogtui</NavbarBrand>
+                    <NavbarBrand href="#" onClick={() => onBrandClick}>Khoaapp</NavbarBrand>
                     <Collapse isOpen={this.state.open} navbar>
                         <Nav navbar>
                             {routes.filter(r => r.nav).map((route, index) => (
