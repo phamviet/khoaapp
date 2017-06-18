@@ -18,6 +18,8 @@ import wordpressLogo from '../../assets/wordpress-logo.png';
 class NewApp extends Component {
     state = {
         saving: false,
+        checking: false,
+        creditRequire: true,
         submitted: false,
         data: {
             domain: '',
@@ -38,8 +40,33 @@ class NewApp extends Component {
     }
 
     componentDidMount() {
-        this.loadDomainList();
+        this.subscriptionCheck();
     }
+
+    async subscriptionCheck() {
+        let creditRequire = true;
+
+        try {
+            const res = await api.post(`/user/${this.props.profile.id}/subscription-check`);
+            if ( res.ok ) {
+                const result = await res.json();
+                if (result.subscribable && result.subscribable.length) {
+                    creditRequire = false;
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            this.setState({ checking: false, creditRequire })
+        }
+
+        if (creditRequire) {
+            this.props.alert('You need more credit to able to deploy a new site. Please top up your account!');
+            this.props.history.push('/profile');
+        } else {
+            this.loadDomainList();
+        }
+    };
 
     async loadDomainList() {
         const res = await api.get('/domain');
@@ -121,7 +148,11 @@ class NewApp extends Component {
     }
 
     render() {
-        const { saving, isRequired, domains, data } = this.state;
+        const { checking, saving, isRequired, domains, data } = this.state;
+
+        if (checking) {
+            return null;
+        }
 
         return (
             <div>
